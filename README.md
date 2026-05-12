@@ -1,4 +1,4 @@
-# Infrastructure Operations Portfolio
+# Портфолио по инфраструктуре и operations
 
 Портфолио по VPS-инфраструктуре и operations-задачам: деплой, nginx, Docker, PostgreSQL, systemd, мониторинг, логи, бэкапы и разбор инцидентов.
 
@@ -6,7 +6,7 @@
 
 ## Кто я
 
-Middle Infrastructure / Operations Engineer.
+Middle Infrastructure / Operations Engineer
 
 Настраиваю и сопровождаю VPS-инфраструктуру для Telegram-ботов, mini apps, VPN и веб-сервисов.
 

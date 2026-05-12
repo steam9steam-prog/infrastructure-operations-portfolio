@@ -1,4 +1,4 @@
-# Infrastructure Operations Portfolio
+# Infrastructure And Operations Portfolio
 
 Portfolio for VPS infrastructure and operations work: deployment, nginx, Docker, PostgreSQL, systemd, monitoring, logs, backups and incident diagnostics.
 
