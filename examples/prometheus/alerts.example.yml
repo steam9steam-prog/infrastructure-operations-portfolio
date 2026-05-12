@@ -1,0 +1,39 @@
+groups:
+  - name: example-service
+    rules:
+      - alert: ServiceDown
+        expr: up{job="example-api"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Example API is down"
+          description: "Prometheus cannot scrape the example API target."
+
+      - alert: HighHttpErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High HTTP 5xx error rate"
+          description: "The service is returning too many server errors."
+
+      - alert: DiskAlmostFull
+        expr: (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"}) < 0.15
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Root disk almost full"
+          description: "Less than 15% disk space is available."
+
+      - alert: SslCertificateExpiringSoon
+        expr: probe_ssl_earliest_cert_expiry - time() < 86400 * 14
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          summary: "SSL certificate expires soon"
+          description: "Certificate expires in less than 14 days."
+

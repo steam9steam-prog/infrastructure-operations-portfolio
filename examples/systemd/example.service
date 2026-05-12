@@ -1,0 +1,19 @@
+[Unit]
+Description=Example API service
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=deploy
+WorkingDirectory=/opt/example-service
+EnvironmentFile=/opt/example-service/.env
+ExecStart=/usr/bin/node /opt/example-service/server.js
+Restart=always
+RestartSec=5
+
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+
