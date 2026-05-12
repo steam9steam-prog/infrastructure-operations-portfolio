@@ -1,31 +1,31 @@
-# Deployment
+# Деплой
 
-## Goal
+## Цель
 
-Deploy Telegram, mini app, VPN, or web services to a VPS in a repeatable and recoverable way.
+Деплой должен быть повторяемым: понятно, какие команды запускать, где смотреть ошибки и как проверить, что сервис живой.
 
-## Pre-Deployment Checklist
+## Перед деплоем
 
-- SSH access works with keys
-- Domain DNS points to the server
-- Firewall allows only required ports
-- .env exists on the server and is not committed
-- nginx config is valid
-- SSL certificate is issued
-- Database migrations or schema changes are understood
-- Backup exists before risky changes
+Проверяю:
 
-## Typical Docker Compose Deployment
+- SSH-доступ работает
+- домен смотрит на сервер
+- .env есть на сервере
+- секреты не лежат в Git
+- nginx config проходит проверку
+- SSL выпущен
+- есть свежий backup, если изменение рискованное
+
+## Docker Compose вариант
 
     ssh deploy@example.com
     cd /opt/example-service
     git pull
-    docker compose pull
     docker compose up -d --build
     docker compose ps
     docker compose logs --tail=100 api
 
-## Typical systemd Deployment
+## systemd вариант
 
     ssh deploy@example.com
     cd /opt/example-service
@@ -35,29 +35,29 @@ Deploy Telegram, mini app, VPN, or web services to a VPS in a repeatable and rec
     sudo systemctl status example-api.service --no-pager
     journalctl -u example-api.service -n 100 --no-pager
 
-## nginx Validation
+## nginx
 
     sudo nginx -t
     sudo systemctl reload nginx
     sudo systemctl status nginx --no-pager
 
-## Post-Deployment Checks
+## После деплоя
 
-- Website opens over HTTPS
-- Bot webhook returns expected status
-- Mini app loads inside Telegram
-- Admin panel is reachable only from allowed sources
-- API health endpoint returns 200
-- Logs do not show repeated exceptions
-- Prometheus target is up
-- Grafana dashboard receives fresh data
+Проверяю:
 
-## Rollback Approach
+- сайт открывается по HTTPS
+- API health возвращает 200
+- webhook бота отвечает
+- mini app грузится
+- в логах нет повторяющихся ошибок
+- сервис не уходит в restart loop
+- метрики в Grafana обновляются
 
-For VPS services, rollback should be clear:
+## Откат
 
-- Keep previous Git commit known
-- Keep previous Docker image tag if available
-- Keep database backup before migrations
-- Avoid destructive migrations without a tested rollback
-- Revert nginx changes if routing breaks
+Для VPS-проекта откат должен быть понятным:
+
+- знать предыдущий рабочий commit
+- иметь backup базы перед рискованными изменениями
+- уметь вернуть старый nginx config
+- не делать необратимые миграции без плана

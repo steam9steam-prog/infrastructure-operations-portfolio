@@ -1,84 +1,60 @@
-# Architecture
+# Архитектура
 
-## Overview
+## Общая схема
 
-The project runs as a live VPS-based service. The server hosts several components behind nginx:
+Проект живет на VPS. Снаружи трафик приходит в nginx, дальше nginx отправляет запросы в нужные сервисы.
 
-- Website frontend
-- Telegram mini app
-- Telegram bot webhook
-- Admin panel
-- Internal API/control service
-- PostgreSQL database
-- Metrics endpoint for Prometheus
-- Grafana dashboard
-
-## High-Level Flow
-
-    User Browser / Telegram
+    Пользователь / Telegram
             |
             v
-    DNS provider
+    DNS / домен
             |
             v
-    nginx reverse proxy + SSL
+    nginx + SSL
             |
-            +--> website frontend
-            +--> mini app frontend
-            +--> bot webhook/API service
-            +--> admin panel
-            +--> Grafana, restricted
+            +--> сайт
+            +--> mini app
+            +--> API / webhook бота
+            +--> админка
+            +--> Grafana, с ограниченным доступом
 
-## Service Boundaries
+## Основные части
 
-The stack is split into externally exposed and internal services.
-
-Externally exposed:
-
-- Website
+- сайт для пользователя
 - Telegram mini app
-- Telegram bot webhook
-- Public API endpoints required by the product
-
-Internal or restricted:
-
+- Telegram-бот
+- backend/control-сервис
 - PostgreSQL
-- Prometheus
-- Grafana
-- Admin panel
-- Internal maintenance endpoints
+- nginx
+- systemd или Docker Compose
+- Prometheus/Grafana
 
-## Runtime Model
+## Что открыто наружу
 
-Two common runtime models are supported:
+Обычно наружу открыты только:
 
-- Docker Compose for services that are easier to deploy as containers
-- systemd for long-running host-level services or Python/Node workers
+- 80/tcp
+- 443/tcp
+- SSH, желательно только для своего IP или через ключи
 
-The exact choice depends on the project component. The main rule is that every long-running process must have a clear restart command, logs, environment configuration, and health check path.
+PostgreSQL, Prometheus и внутренние сервисы не должны быть открыты в интернет без необходимости.
 
-## Domains And Routing
+## Пример доменной структуры
 
-Example domain layout:
+    example.com              -> сайт
+    app.example.com          -> mini app
+    api.example.com          -> API / webhook
+    admin.example.com        -> админка
+    grafana.example.com      -> мониторинг
 
-    example.com              -> website
-    app.example.com          -> Telegram mini app
-    api.example.com          -> API and bot webhook
-    admin.example.com        -> admin panel, restricted
-    grafana.example.com      -> Grafana, restricted
+## Как я смотрю на такую архитектуру
 
-## Data Storage
+Для VPS-проекта важны не сложные технологии, а понятность:
 
-PostgreSQL stores application data. Backups can be created with pg_dump and stored outside the application directory. Important backup changes should be checked with a test restore before relying on them.
-
-## Observability
-
-Operational visibility comes from:
-
-- systemd service state
-- journalctl logs
-- nginx access and error logs
-- application logs
-- Prometheus metrics
-- Grafana dashboards
-- HTTP health checks
+- где запущен сервис
+- какой порт слушает
+- кто его рестартит
+- где лежат логи
+- как проверить health
+- как откатиться после плохого деплоя
+- где хранятся секреты

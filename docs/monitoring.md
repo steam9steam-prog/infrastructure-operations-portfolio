@@ -1,75 +1,53 @@
-# Monitoring
+# Мониторинг
 
-## Goals
+## Задача мониторинга
 
-Monitoring should answer three practical questions:
+Мониторинг нужен не для красоты. Он должен быстро отвечать:
 
-- Is the service up?
-- Is it serving users correctly?
-- What changed before the incident?
+- сервис живой?
+- пользователи могут им пользоваться?
+- что сломалось первым?
 
-## Signals
+## Минимум, который полезен
 
-Minimum useful signals:
+- health endpoint
+- доступность API
+- количество ошибок
+- рестарты systemd/Docker
+- свободное место на диске
+- CPU/RAM
+- доступность PostgreSQL
+- срок действия SSL
+- ошибки webhook бота
 
-- HTTP health status
-- API request count
-- API error count
-- Bot webhook failures
-- Queue or background job failures
-- Database availability
-- Disk usage
-- Memory usage
-- Service restarts
-- SSL certificate expiry
+## Что смотреть в Grafana
 
-## Prometheus Targets
-
-Example targets:
-
-    api: metrics endpoint
-    node_exporter: host metrics
-    postgres_exporter: database metrics
-    nginx exporter or log-derived metrics
-
-## Grafana Dashboards
-
-Useful panels:
-
-- Service uptime
-- Request rate
-- Error rate
-- Response latency
-- CPU and memory
-- Disk usage
+- uptime
+- request rate
+- error rate
+- latency
+- CPU/RAM
+- disk usage
 - PostgreSQL connections
-- Background job failures
-- Business events, if available
+- bot/webhook events
 
-## Alert Rules
+## Логи
 
-Alerts should be clear and actionable:
-
-- Service down
-- High error rate
-- Disk almost full
-- Database unavailable
-- SSL certificate close to expiry
-- No successful bot events for an unusual period
-
-## Log Sources
+Самые частые команды:
 
     journalctl -u example-api.service -f
-    sudo tail -f /var/log/nginx/access.log
+    journalctl -u example-api.service -n 200 --no-pager
     sudo tail -f /var/log/nginx/error.log
+    sudo tail -f /var/log/nginx/access.log
     docker compose logs -f api
 
-## Incident Notes
+## Алерты
 
-Every incident should leave an incident note:
+Алертов не должно быть слишком много. Лучше несколько понятных:
 
-- What happened
-- When it started
-- How it was detected
-- What fixed it
-- What should be improved
+- сервис упал
+- много 5xx ошибок
+- диск почти заполнен
+- база недоступна
+- SSL скоро истечет
+- бот долго не получает успешных событий

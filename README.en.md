@@ -63,15 +63,17 @@ The service includes:
     docs/monitoring.md
     docs/security.md
     docs/incident-runbook.md
-    docs-ru/architecture.md
-    docs-ru/deployment.md
-    docs-ru/monitoring.md
-    docs-ru/security.md
-    docs-ru/incident-runbook.md
+    docs-en/architecture.md
+    docs-en/deployment.md
+    docs-en/monitoring.md
+    docs-en/security.md
+    docs-en/incident-runbook.md
     examples/nginx/example.conf
     examples/systemd/example.service
     examples/docker-compose/docker-compose.example.yml
     examples/prometheus/alerts.example.yml
+
+Russian documentation is in docs/. English documentation is in docs-en/.
 
 ## Operational Responsibilities
 

@@ -63,13 +63,13 @@ Middle Infrastructure / Operations Engineer.
     README.md
     README.en.md
     docs/
-    docs-ru/
+    docs-en/
     examples/nginx/example.conf
     examples/systemd/example.service
     examples/docker-compose/docker-compose.example.yml
     examples/prometheus/alerts.example.yml
 
-Английская версия README лежит в README.en.md.
+Русская документация лежит в docs/. Английская версия README лежит в README.en.md, английская документация — в docs-en/.
 
 ## Примеры внутри
 

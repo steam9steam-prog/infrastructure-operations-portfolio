@@ -1,59 +1,47 @@
-# Security
+# Безопасность
 
-## Principles
+## Базовые правила
 
-- Keep secrets out of Git
-- Expose only required ports
-- Use SSH keys instead of passwords
-- Restrict admin and monitoring endpoints
-- Validate webhooks with secrets
-- Keep backups protected
-- Stop startup when required secrets are missing
+- секреты не коммитить
+- SSH только по ключам
+- наружу открывать только нужные порты
+- админку и Grafana ограничивать
+- webhook проверять по секрету, если возможно
+- backup хранить не в публичной директории
 
-## Server Access
+## Что нельзя выкладывать
 
-Recommended baseline:
+- .env
+- Telegram bot token
+- database password
+- payment provider secrets
+- API/webhook secrets
+- реальные IP и домены, если они приватные
+- дампы PostgreSQL
+
+## Firewall
+
+Базовый пример:
 
     sudo ufw allow OpenSSH
     sudo ufw allow 80/tcp
     sudo ufw allow 443/tcp
     sudo ufw enable
 
-SSH access should use keys. Password login should be disabled after key access is confirmed.
+## Админка и мониторинг
 
-## Secrets
+Для админки, Prometheus и Grafana лучше использовать:
 
-Do not commit:
+- allowlist IP
+- basic auth
+- VPN-only доступ
+- закрытый internal port без публикации наружу
 
-- Telegram bot tokens
-- Payment provider tokens
-- Database passwords
-- API keys
-- API secrets
-- Real .env files
-- Real nginx configs with private hostnames if sensitive
+## Backup
 
-Use .env.example to document required variables without real values.
+Backup должен быть:
 
-## nginx Restrictions
-
-Admin and monitoring routes should be protected with at least one of:
-
-- IP allowlist
-- Basic auth
-- VPN-only access
-- Internal network access
-
-## Backups
-
-Backups should be:
-
-- Created automatically
-- Stored outside the app directory
-- Protected from public access
-- Rotated
-- Tested with restore commands
-
-## Webhooks
-
-Webhook endpoints should verify a secret header or token where supported. Unknown or invalid webhook calls should be rejected.
+- регулярным
+- доступным для восстановления
+- не публичным
+- проверенным через restore хотя бы на тестовой базе

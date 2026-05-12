@@ -1,14 +1,17 @@
 # Incident Runbook
 
-## First 5 Minutes
+## Первые действия
 
-1. Confirm the issue.
-2. Check whether the whole server is down or only one service.
-3. Check recent deploys or config changes.
-4. Check service status and logs.
-5. Decide whether to rollback, restart, or investigate deeper.
+Когда что-то упало:
 
-## Basic Commands
+1. Проверить, проблема у всех или у одного пользователя.
+2. Понять, упал весь сервер или один сервис.
+3. Вспомнить последние изменения: деплой, nginx, SSL, база, домен.
+4. Посмотреть статус сервисов.
+5. Посмотреть свежие логи.
+6. Решить: рестарт, откат или deeper debug.
+
+## Базовая проверка сервера
 
     uptime
     df -h
@@ -17,66 +20,57 @@
     sudo nginx -t
     docker compose ps
 
-## systemd Service Down
+## Если упал systemd service
 
     sudo systemctl status example-api.service --no-pager
     journalctl -u example-api.service -n 200 --no-pager
     sudo systemctl restart example-api.service
     journalctl -u example-api.service -f
 
-Check:
+Частые причины:
 
-- Missing environment variable
-- Broken dependency
-- Database unavailable
-- Port already in use
-- Permission problem
-- Bad deploy
+- нет переменной окружения
+- сломался deploy
+- порт занят
+- база недоступна
+- ошибка прав
+- сервис уходит в restart loop
 
-## nginx Routing Problem
+## Если проблема в nginx
 
     sudo nginx -t
     sudo systemctl status nginx --no-pager
     sudo tail -n 100 /var/log/nginx/error.log
     sudo systemctl reload nginx
 
-Check:
+Проверить:
 
-- Wrong upstream port
-- Service not listening
-- SSL certificate issue
-- WebSocket headers missing
-- DNS points to wrong IP
+- правильный upstream port
+- жив ли backend
+- выпущен ли SSL
+- верные ли WebSocket headers
+- DNS смотрит на нужный сервер
 
-## Database Problem
+## Если проблема с базой
 
     sudo systemctl status postgresql --no-pager
     sudo -u postgres psql -c "select now();"
 
-Check:
+Проверить:
 
-- Disk full
-- Too many connections
-- Wrong credentials
-- Migration failed
-- Backup restore needed
+- место на диске
+- подключения
+- логин/пароль
+- миграции
+- последний backup
 
-## Telegram Bot/Webhook Problem
+## После починки
 
-Check:
+Коротко записать:
 
-- Webhook URL uses HTTPS
-- nginx routes to the right service
-- Bot token is correct
-- App logs show incoming requests
-- Telegram API returns a useful error
-
-## After Fix
-
-Write an incident note:
-
-    Date:
-    Impact:
-    Root cause:
-    Fix:
-    Prevention:
+    Дата:
+    Что сломалось:
+    Как заметили:
+    Причина:
+    Что сделали:
+    Как не повторить:
