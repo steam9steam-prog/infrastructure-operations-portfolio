@@ -8,7 +8,7 @@
 
 Middle Infrastructure / Operations Engineer
 
-Настраиваю и сопровождаю VPS-инфраструктуру для Telegram-ботов, mini apps, VPN и веб-сервисов.
+Настраиваю и сопровождаю VPS-инфраструктуру для Telegram-ботов, mini apps и веб-сервисов.
 
 ## Практический кейс
 
