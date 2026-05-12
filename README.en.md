@@ -1,16 +1,16 @@
-# VPN Infrastructure Case Study
+# Infrastructure Operations Portfolio
 
-Infrastructure case study for a live VPS-based VPN service.
+Portfolio for VPS infrastructure and operations work: deployment, nginx, Docker, PostgreSQL, systemd, monitoring, logs, backups and incident diagnostics.
 
-This repository does not contain private application code, secrets, real domains, IP addresses, tokens, database dumps, or real server configuration files. It shows the operational approach, deployment model, monitoring practices, and incident handling process for a live service.
+This repository does not contain private application code, secrets, real domains, IP addresses, tokens, database dumps, or real server configuration files. It shows my approach to infrastructure for live services and common operations tasks.
 
 ## Role
 
 Middle Infrastructure / Operations Engineer
 
-## Service Scope
+## Practical Case
 
-The service includes:
+One practical case in this portfolio is based on my live VPS-based VPN service. VPN is not the only service direction; it is used here as a real example with several common infrastructure components:
 
 - Public website
 - Telegram bot
@@ -35,7 +35,7 @@ The service includes:
 - Basic backup and restore workflow
 - Firewall and SSH key access
 
-## What This Case Study Shows
+## What This Portfolio Shows
 
 - How a live service can be structured on a VPS
 - How services are deployed and restarted safely
